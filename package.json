@@ -1,0 +1,115 @@
+{
+  "name": "@infinite-debugger/rmk-utils",
+  "version": "0.1.0-alpha.0",
+  "description": "RMK Utils is a library of utility functions",
+  "keywords": [
+    "node",
+    "javascript"
+  ],
+  "homepage": "https://github.com/rmkasendwa/rmk-utils#readme",
+  "bugs": {
+    "url": "https://github.com/rmkasendwa/rmk-utils/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmkasendwa/rmk-utils.git"
+  },
+  "license": "MIT",
+  "author": "Ronald M. Kasendwa",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "prebuild": "rm -rf lib",
+    "build": "npm run tsc && copy-and-watch src/**/*.{png,jpg,css,scss,sass,json} lib",
+    "postbuild": "node ./scripts/postbuild",
+    "eslint": "eslint --fix",
+    "format": "prettier --write \"./**/*.{js,jsx,ts,tsx,html,htm,json,css,scss,md}\"",
+    "postinstall": "npm run prepare",
+    "prepare": "husky install",
+    "publish": "npm run build && npm publish ./lib/ --access=public",
+    "start": "concurrently --names \"Typescript,Assets\" -c \"blue.bold,magenta.bold\" \"tsc -w\" \"copy-and-watch --watch src/**/*.{png,jpg,css,scss,sass,json} lib\"",
+    "test": "react-scripts test --watchAll=false",
+    "test:watch": "react-scripts test",
+    "tsc": "tsc"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/crypto-js": "^4.1.1",
+    "@types/jest": "^29.2.1",
+    "@types/lodash": "^4.14.187",
+    "@types/node": "^18.11.9",
+    "@types/object-hash": "^2.2.1",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "concurrently": "^7.5.0",
+    "copy-and-watch": "^0.1.6",
+    "crypto-js": "^4.1.1",
+    "date-fns": "^2.29.3",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-sort-keys-fix": "^1.1.2",
+    "eslint-plugin-storybook": "^0.6.7",
+    "fs-extra": "^10.1.0",
+    "husky": "^8.0.1",
+    "import-sort-style-module": "^6.0.0",
+    "lodash": "^4.17.21",
+    "prettier": "^2.7.1",
+    "prettier-plugin-import-sort": "0.0.7",
+    "prettier-plugin-sort-json": "0.0.3",
+    "typescript": "^4.8.4",
+    "yup": "^0.32.11"
+  },
+  "peerDependencies": {
+    "crypto-js": ">=4.1.1",
+    "date-fns": ">=2.29.3",
+    "lodash": ">=4.17.21"
+  },
+  "importSort": {
+    ".js, .jsx, .ts, .tsx": {
+      "style": "module",
+      "parser": "typescript"
+    }
+  },
+  "dependencies": {
+    "crypto-js": ">=4.1.1",
+    "date-fns": ">=2.29.3",
+    "lodash": ">=4.17.21"
+  }
+}
