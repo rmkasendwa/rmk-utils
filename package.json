@@ -1,6 +1,6 @@
 {
   "name": "@infinite-debugger/rmk-utils",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.2",
   "description": "RMK Utils is a library of utility functions",
   "keywords": [
     "node",
@@ -17,12 +17,15 @@
   "license": "MIT",
   "author": "Ronald M. Kasendwa",
   "main": "index.js",
+  "module": "esm/index.js",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
     "prebuild": "rm -rf lib",
-    "build": "npm run tsc && copy-and-watch src/**/*.{png,jpg,css,scss,sass,json} lib",
+    "build": "npm run build:commonjs && npm run build:esm",
+    "build:commonjs": "tsc && copy-and-watch src/**/*.{png,jpg,css,scss,sass,json} lib",
+    "build:esm": "tsc --project tsconfig-esm.compile.json && copy-and-watch src/**/*.{png,jpg,css,scss,sass,json} lib",
     "postbuild": "node ./scripts/postbuild",
     "eslint": "eslint --fix",
     "format": "prettier --write \"./**/*.{js,jsx,ts,tsx,html,htm,json,css,scss,md}\"",

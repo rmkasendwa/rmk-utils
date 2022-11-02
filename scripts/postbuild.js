@@ -8,7 +8,8 @@ const outputDirectory = `${currentWorkingDirectory}/lib`;
 const packageFile = require(`${currentWorkingDirectory}/package.json`);
 const project = {
   ...omit(packageFile, 'devDependencies', 'jest', 'scripts'),
-  main: './index.js',
+  main: 'index.js',
+  module: 'esm/index.js',
   types: './index.d.ts',
 };
 
