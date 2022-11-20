@@ -25,7 +25,7 @@ export const getInterpolatedPath = <T extends TemplatePathParams = any>(
   templatePath: TemplatePath<T> | string,
   params: T
 ): string => {
-  const regex = /:(\w+)/g;
+  const regex = /:(\w+)|\{(\w+)\}|\[(\w+)\]/g;
   const extractedParameters = [];
   let match;
   do {
@@ -63,7 +63,7 @@ export const paramsSufficientForPath = (
   templatePath: string,
   params: Record<string, PathParam>
 ) => {
-  const regex = /:(\w+)/g;
+  const regex = /:(\w+)|\{(\w+)\}|\[(\w+)\]/g;
   const extractedParameters = [];
   let match;
   do {
@@ -130,6 +130,9 @@ export const addSearchParams = (
  */
 export const matchPath = (templatePath: string, testPath: string) => {
   return Boolean(
-    RegExp(`^${templatePath.replace(/:(\w+)/g, '(\\w+)')}$`, 'g').exec(testPath)
+    RegExp(
+      `^${templatePath.replace(/:(\w+)|\{(\w+)\}|\[(\w+)\]/g, '(\\w+)')}$`,
+      'g'
+    ).exec(testPath)
   );
 };
