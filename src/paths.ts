@@ -80,11 +80,16 @@ export const paramsSufficientForPath = (
     });
 };
 
+export interface AddSearchParamsOptions {
+  arrayParamStyle?: 'comma' | 'append';
+}
+
 /**
  * Adds search params to a path.
  *
  * @param routePath The path to which search params will be added.
  * @param params The search params to add to path.
+ * @param options Configuration options.
  *
  * @returns The full path with search params added.
  *
@@ -93,23 +98,38 @@ export const paramsSufficientForPath = (
  */
 export const addSearchParams = (
   routePath: string,
-  params: Record<string, PathParam | PathParam[] | null | undefined>
+  params: Record<string, PathParam | PathParam[] | null | undefined>,
+  { arrayParamStyle = 'comma' }: AddSearchParamsOptions = {}
 ): string => {
   const keys = Object.keys(params);
   if (keys.length === 0) return routePath;
   const queryString = keys
     .reduce((accumulator, key) => {
-      if (
-        params[key] != null &&
-        (typeof params[key] !== 'string' || String(params[key]).length > 0)
-      ) {
-        const value = (() => {
-          if (Array.isArray(params[key])) {
-            return (params[key] as any).join(',');
+      switch (arrayParamStyle) {
+        case 'append':
+          if (params[key] != null && String(params[key]).length > 0) {
+            if (Array.isArray(params[key])) {
+              [...(params[key] as any)].forEach((value) => {
+                accumulator.push(`${key}=${encodeURIComponent(value)}`);
+              });
+            } else {
+              accumulator.push(
+                `${key}=${encodeURIComponent(String(params[key]))}`
+              );
+            }
           }
-          return String(params[key]);
-        })();
-        accumulator.push(`${key}=${encodeURIComponent(value)}`);
+          break;
+        case 'comma':
+        default:
+          if (params[key] != null && String(params[key]).length > 0) {
+            const value = (() => {
+              if (Array.isArray(params[key])) {
+                return (params[key] as any).join(',');
+              }
+              return String(params[key]);
+            })();
+            accumulator.push(`${key}=${encodeURIComponent(value)}`);
+          }
       }
       return accumulator;
     }, [] as string[])
