@@ -8,17 +8,17 @@ export const diff = (
   biDirectional = false
 ) => {
   const dataDiff: any = omitBy(updatedData, (value, key) => {
-    if (originalData[key] != null && typeof originalData[key] === 'object') {
+    if (typeof originalData?.[key] === 'object') {
       const similar = isEmpty(diff(updatedData[key], originalData[key]));
       if (similar) return isEmpty(diff(originalData[key], updatedData[key]));
       return similar;
     }
-    return originalData[key] === value;
+    return originalData?.[key] === value;
   });
   if (biDirectional) {
     const mirrorDiff = diff(originalData, updatedData);
     for (const key in mirrorDiff) {
-      if (!dataDiff[key] && mirrorDiff[key]) {
+      if (!dataDiff?.[key] && mirrorDiff?.[key]) {
         dataDiff[key] = mirrorDiff[key];
       }
     }
