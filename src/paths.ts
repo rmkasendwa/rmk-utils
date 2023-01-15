@@ -1,5 +1,7 @@
 export type PathParam = string | number | boolean;
 
+export type QueryParam = PathParam | Record<string, any>;
+
 export type TemplatePathParams = Record<string | number | symbol, PathParam>;
 
 export type TemplatePath<T extends TemplatePathParams = any> = string & {
@@ -98,7 +100,7 @@ export interface AddSearchParamsOptions {
  */
 export const addSearchParams = (
   routePath: string,
-  params: Record<string, PathParam | PathParam[] | null | undefined>,
+  params: Record<string, QueryParam | QueryParam[] | null | undefined>,
   { arrayParamStyle = 'comma' }: AddSearchParamsOptions = {}
 ): string => {
   const keys = Object.keys(params);
