@@ -125,6 +125,13 @@ export const addSearchParams = (
         default:
           if (params[key] != null && String(params[key]).length > 0) {
             const value = (() => {
+              if (
+                params[key] != null &&
+                typeof params[key] === 'object' &&
+                String(params[key]).match('[object Object]')
+              ) {
+                return JSON.stringify(params[key]);
+              }
               if (Array.isArray(params[key])) {
                 return (params[key] as any).join(',');
               }
