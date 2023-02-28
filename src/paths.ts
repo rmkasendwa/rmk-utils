@@ -128,7 +128,7 @@ export const addSearchParams = (
               if (
                 params[key] != null &&
                 typeof params[key] === 'object' &&
-                String(params[key]).match('[object Object]')
+                String(params[key]).includes('[object Object]')
               ) {
                 return JSON.stringify(params[key]);
               }
