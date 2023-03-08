@@ -84,13 +84,14 @@ export const paramsSufficientForPath = (
 
 export interface AddSearchParamsOptions {
   arrayParamStyle?: 'comma' | 'append';
+  mode?: 'string' | 'json';
 }
 
 /**
  * Adds search params to a path.
  *
  * @param routePath The path to which search params will be added.
- * @param params The search params to add to path.
+ * @param searchParams The search params to add to path.
  * @param options Configuration options.
  *
  * @returns The full path with search params added.
@@ -100,49 +101,67 @@ export interface AddSearchParamsOptions {
  */
 export const addSearchParams = (
   routePath: string,
-  params: Record<string, QueryParam | QueryParam[] | null | undefined>,
-  { arrayParamStyle = 'comma' }: AddSearchParamsOptions = {}
+  searchParams: Record<string, QueryParam | QueryParam[] | null | undefined>,
+  { arrayParamStyle = 'comma', mode = 'string' }: AddSearchParamsOptions = {}
 ): string => {
-  const keys = Object.keys(params);
+  const keys = Object.keys(searchParams);
   if (keys.length === 0) return routePath;
-  const queryString = keys
-    .reduce((accumulator, key) => {
-      switch (arrayParamStyle) {
-        case 'append':
-          if (params[key] != null && String(params[key]).length > 0) {
-            if (Array.isArray(params[key])) {
-              [...(params[key] as any)].forEach((value) => {
-                accumulator.push(`${key}=${encodeURIComponent(value)}`);
-              });
-            } else {
-              accumulator.push(
-                `${key}=${encodeURIComponent(String(params[key]))}`
-              );
-            }
-          }
-          break;
-        case 'comma':
-        default:
-          if (params[key] != null && String(params[key]).length > 0) {
-            const value = (() => {
+
+  const paramsKeyValuePair = (() => {
+    switch (mode) {
+      case 'string':
+        return keys.reduce((accumulator, key) => {
+          switch (arrayParamStyle) {
+            case 'append':
               if (
-                params[key] != null &&
-                typeof params[key] === 'object' &&
-                String(params[key]).includes('[object Object]')
+                searchParams[key] != null &&
+                String(searchParams[key]).length > 0
               ) {
-                return JSON.stringify(params[key]);
+                if (Array.isArray(searchParams[key])) {
+                  [...(searchParams[key] as any)].forEach((value) => {
+                    accumulator.push(`${key}=${encodeURIComponent(value)}`);
+                  });
+                } else {
+                  accumulator.push(
+                    `${key}=${encodeURIComponent(String(searchParams[key]))}`
+                  );
+                }
               }
-              if (Array.isArray(params[key])) {
-                return (params[key] as any).join(',');
+              break;
+            case 'comma':
+            default:
+              if (
+                searchParams[key] != null &&
+                String(searchParams[key]).length > 0
+              ) {
+                const value = (() => {
+                  if (
+                    searchParams[key] != null &&
+                    typeof searchParams[key] === 'object' &&
+                    String(searchParams[key]).includes('[object Object]')
+                  ) {
+                    return JSON.stringify(searchParams[key]);
+                  }
+                  if (Array.isArray(searchParams[key])) {
+                    return (searchParams[key] as any).join(',');
+                  }
+                  return String(searchParams[key]);
+                })();
+                accumulator.push(`${key}=${encodeURIComponent(value)}`);
               }
-              return String(params[key]);
-            })();
-            accumulator.push(`${key}=${encodeURIComponent(value)}`);
           }
-      }
-      return accumulator;
-    }, [] as string[])
-    .join('&');
+          return accumulator;
+        }, [] as string[]);
+      case 'json':
+        return keys.reduce((accumulator, key) => {
+          if (searchParams[key] != null) {
+            accumulator.push(`${key}=${JSON.stringify(searchParams[key])}`);
+          }
+          return accumulator;
+        }, [] as string[]);
+    }
+  })();
+  const queryString = paramsKeyValuePair.join('&');
   if (queryString.length > 0) {
     return routePath + '?' + queryString;
   }
