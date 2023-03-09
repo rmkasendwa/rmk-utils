@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="2" failures="0" errors="0" time="3.764">
-  <testsuite name="matchPath" errors="0" failures="0" skipped="0" timestamp="2023-03-09T02:11:31" time="3.583" tests="2">
-    <testcase classname="matchPath should return true if the test path matches the template path" name="matchPath should return true if the test path matches the template path" time="0.003">
+<testsuites name="jest tests" tests="3" failures="0" errors="0" time="7.485">
+  <testsuite name="matchPath" errors="0" failures="0" skipped="0" timestamp="2023-03-09T08:01:50" time="6.292" tests="3">
+    <testcase classname="matchPath should return true if the test path matches the template path" name="matchPath should return true if the test path matches the template path" time="0.002">
     </testcase>
     <testcase classname="addSearchParams should encode object as stringified url" name="addSearchParams should encode object as stringified url" time="0.001">
+    </testcase>
+    <testcase classname="addSearchParams should be able to work work with both primitive types and object types in same url" name="addSearchParams should be able to work work with both primitive types and object types in same url" time="0">
     </testcase>
   </testsuite>
 </testsuites>
