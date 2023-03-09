@@ -117,15 +117,30 @@ export const addSearchParams = (
                 searchParams[key] != null &&
                 String(searchParams[key]).length > 0
               ) {
-                if (Array.isArray(searchParams[key])) {
-                  [...(searchParams[key] as any)].forEach((value) => {
-                    accumulator.push(`${key}=${encodeURIComponent(value)}`);
-                  });
-                } else {
-                  accumulator.push(
-                    `${key}=${encodeURIComponent(String(searchParams[key]))}`
-                  );
-                }
+                const baseSearchParamValue = searchParams[key]!;
+                const findValuePath = (
+                  searchParamValue: any,
+                  searchParamValuePath: string[] = []
+                ) => {
+                  if (typeof searchParamValue === 'object') {
+                    const entries = Object.entries(searchParamValue);
+                    entries.forEach(([objectKey, value]) => {
+                      findValuePath(value, [
+                        ...searchParamValuePath,
+                        objectKey,
+                      ]);
+                    });
+                  } else {
+                    accumulator.push(
+                      `${key}${searchParamValuePath
+                        .map((key) => {
+                          return `[${key}]`;
+                        })
+                        .join('')}=${searchParamValue}`
+                    );
+                  }
+                };
+                findValuePath(baseSearchParamValue);
               }
               break;
             case 'comma':
