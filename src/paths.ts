@@ -27,24 +27,65 @@ export const getInterpolatedPath = <T extends TemplatePathParams = any>(
   templatePath: TemplatePath<T> | string,
   params: T
 ): string => {
-  const regex = /:(\w+)|\{(\w+)\}|\[(\w+)\]/g;
-  const extractedParameters = [];
-  let match;
-  do {
-    match = regex.exec(templatePath);
-    match && extractedParameters.push(match[1]);
-  } while (match);
-  extractedParameters
-    .filter((key) => !key.match(/^\d+$/g))
-    .forEach((key) => {
-      if (!params[key]) {
-        throw new Error(`Param ${key} not found`);
-      }
-      templatePath = templatePath.replace(
-        `:${key}`,
-        encodeURIComponent(params[key])
-      ) as typeof templatePath;
-    });
+  if (templatePath.match(/:(\w+)/g)) {
+    const extractedParameters = [];
+    const regex = /:(\w+)/g;
+    let match;
+    do {
+      match = regex.exec(templatePath);
+      match && extractedParameters.push(match[1]);
+    } while (match);
+    extractedParameters
+      .filter((key) => !key.match(/^\d+$/g))
+      .forEach((key) => {
+        if (!params[key]) {
+          throw new Error(`Param ${key} not found`);
+        }
+        templatePath = templatePath.replace(
+          `:${key}`,
+          encodeURIComponent(params[key])
+        ) as typeof templatePath;
+      });
+  } else if (templatePath.match(/\{(\w+)\}/g)) {
+    const extractedParameters = [];
+    const regex = /\{(\w+)\}/g;
+    let match;
+    do {
+      match = regex.exec(templatePath);
+      match && extractedParameters.push(match[1]);
+    } while (match);
+    extractedParameters
+      .filter((key) => !key.match(/^\d+$/g))
+      .forEach((key) => {
+        if (!params[key]) {
+          throw new Error(`Param ${key} not found`);
+        }
+        templatePath = templatePath.replace(
+          `{${key}}`,
+          encodeURIComponent(params[key])
+        ) as typeof templatePath;
+      });
+  } else if (templatePath.match(/\[(\w+)\]/g)) {
+    const extractedParameters = [];
+    const regex = /\[(\w+)\]/g;
+    let match;
+    do {
+      match = regex.exec(templatePath);
+      match && extractedParameters.push(match[1]);
+    } while (match);
+    extractedParameters
+      .filter((key) => !key.match(/^\d+$/g))
+      .forEach((key) => {
+        if (!params[key]) {
+          throw new Error(`Param ${key} not found`);
+        }
+        templatePath = templatePath.replace(
+          `[${key}]`,
+          encodeURIComponent(params[key])
+        ) as typeof templatePath;
+      });
+  }
+
   return templatePath;
 };
 
@@ -65,13 +106,32 @@ export const paramsSufficientForPath = (
   templatePath: string,
   params: Record<string, PathParam>
 ) => {
-  const regex = /:(\w+)|\{(\w+)\}|\[(\w+)\]/g;
-  const extractedParameters = [];
-  let match;
-  do {
-    match = regex.exec(templatePath);
-    match && extractedParameters.push(match[1]);
-  } while (match);
+  const extractedParameters = (() => {
+    const extractedParameters = [];
+    if (templatePath.match(/:(\w+)/g)) {
+      const regex = /:(\w+)/g;
+      let match;
+      do {
+        match = regex.exec(templatePath);
+        match && extractedParameters.push(match[1]);
+      } while (match);
+    } else if (templatePath.match(/\{(\w+)\}/g)) {
+      const regex = /\{(\w+)\}/g;
+      let match;
+      do {
+        match = regex.exec(templatePath);
+        match && extractedParameters.push(match[1]);
+      } while (match);
+    } else if (templatePath.match(/\[(\w+)\]/g)) {
+      const regex = /\[(\w+)\]/g;
+      let match;
+      do {
+        match = regex.exec(templatePath);
+        match && extractedParameters.push(match[1]);
+      } while (match);
+    }
+    return extractedParameters;
+  })();
   return extractedParameters
     .filter((key) => !key.match(/^\d+$/g))
     .every((key) => {
