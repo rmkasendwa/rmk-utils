@@ -4,24 +4,23 @@
  * @param object The object with null values.
  * @returns New object without null values.
  */
-export const removeNullValues = <T extends Record<string, any>>(object: T) => {
-  return Object.keys(object)
-    .filter((key) => {
-      return object[key] != null;
-    })
-    .reduce((accumulator, key) => {
-      if (object[key] && typeof object[key] === 'object') {
-        (accumulator as any)[key] = removeNullValues(object[key]);
-      } else if (Array.isArray(object[key])) {
-        (accumulator as any)[key] = object[key].map((item: any) => {
-          if (item && typeof item === 'object') {
-            return removeNullValues(item);
-          }
-          return item;
-        });
-      } else {
-        (accumulator as any)[key] = object[key];
-      }
-      return accumulator;
-    }, {} as T);
+export const removeNullValues = (obj: any): any => {
+  if (typeof obj !== 'object' || obj == null) {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(removeNullValues).filter((value) => value != null);
+  }
+
+  const result: any = {};
+
+  for (const key in obj) {
+    const value = removeNullValues(obj[key]);
+    if (value != null) {
+      result[key] = value;
+    }
+  }
+
+  return result;
 };
