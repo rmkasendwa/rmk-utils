@@ -10,7 +10,18 @@ export const removeNullValues = <T extends Record<string, any>>(object: T) => {
       return object[key] != null;
     })
     .reduce((accumulator, key) => {
-      (accumulator as any)[key] = object[key];
+      if (object[key] && typeof object[key] === 'object') {
+        (accumulator as any)[key] = removeNullValues(object[key]);
+      } else if (Array.isArray(object[key])) {
+        (accumulator as any)[key] = object[key].map((item: any) => {
+          if (item && typeof item === 'object') {
+            return removeNullValues(item);
+          }
+          return item;
+        });
+      } else {
+        (accumulator as any)[key] = object[key];
+      }
       return accumulator;
     }, {} as T);
 };
