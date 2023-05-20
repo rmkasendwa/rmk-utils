@@ -54,3 +54,47 @@ export const getMemorySize = (object: any, formatted = false) => {
   }
   return formatted ? formatBytes(bytes) : bytes;
 };
+
+export const parseCSV = (csvData: string, delimiter = ',') => {
+  const lines = csvData.split('\n');
+  const headers = lines[0].split(delimiter);
+  const rows = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+
+    if (line === '') continue; // Skip empty lines
+
+    const values = [];
+    let currentField = '';
+    let insideQuotes = false;
+
+    for (let j = 0; j < line.length; j++) {
+      const char = line[j];
+
+      if (char === '"') {
+        insideQuotes = !insideQuotes;
+      } else if (char === delimiter && !insideQuotes) {
+        values.push(currentField.trim());
+        currentField = '';
+      } else {
+        currentField += char;
+      }
+    }
+
+    values.push(currentField.trim());
+
+    const row: any = {};
+
+    for (let j = 0; j < headers.length; j++) {
+      const header = headers[j].trim();
+      const value = values[j] ? values[j].trim() : '';
+
+      row[header] = value;
+    }
+
+    rows.push(row);
+  }
+
+  return rows;
+};
