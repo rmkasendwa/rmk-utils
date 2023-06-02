@@ -196,7 +196,7 @@ export const addSearchParams = (
                         .map((key) => {
                           return `[${key}]`;
                         })
-                        .join('')}=${searchParamValue}`
+                        .join('')}=${encodeURIComponent(searchParamValue)}`
                     );
                   }
                 };
@@ -230,7 +230,9 @@ export const addSearchParams = (
       case 'json':
         return keys.reduce((accumulator, key) => {
           if (searchParams[key] != null) {
-            accumulator.push(`${key}=${JSON.stringify(searchParams[key])}`);
+            accumulator.push(
+              `${key}=${encodeURIComponent(JSON.stringify(searchParams[key]))}`
+            );
           }
           return accumulator;
         }, [] as string[]);
