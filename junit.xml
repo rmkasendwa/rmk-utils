@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="3" failures="0" errors="0" time="7.485">
-  <testsuite name="matchPath" errors="0" failures="0" skipped="0" timestamp="2023-03-09T08:01:50" time="6.292" tests="3">
-    <testcase classname="matchPath should return true if the test path matches the template path" name="matchPath should return true if the test path matches the template path" time="0.002">
+<testsuites name="jest tests" tests="7" failures="0" errors="0" time="7.589">
+  <testsuite name="matchPath" errors="0" failures="0" skipped="0" timestamp="2023-06-09T00:01:55" time="5.178" tests="3">
+    <testcase classname="matchPath should return true if the test path matches the template path" name="matchPath should return true if the test path matches the template path" time="0.003">
     </testcase>
     <testcase classname="addSearchParams should encode object as stringified url" name="addSearchParams should encode object as stringified url" time="0.001">
     </testcase>
-    <testcase classname="addSearchParams should be able to work work with both primitive types and object types in same url" name="addSearchParams should be able to work work with both primitive types and object types in same url" time="0">
+    <testcase classname="addSearchParams should be able to work work with both primitive types and object types in same url" name="addSearchParams should be able to work work with both primitive types and object types in same url" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="createDateWithoutTimezoneOffset" errors="0" failures="0" skipped="0" timestamp="2023-06-09T00:01:55" time="6.852" tests="4">
+    <testcase classname="createDateWithoutTimezoneOffset should return a new Date instance without timezone offset for number input" name="createDateWithoutTimezoneOffset should return a new Date instance without timezone offset for number input" time="0.003">
+    </testcase>
+    <testcase classname="createDateWithoutTimezoneOffset should return a new Date instance without timezone offset for Date input" name="createDateWithoutTimezoneOffset should return a new Date instance without timezone offset for Date input" time="0.001">
+    </testcase>
+    <testcase classname="createDateWithoutTimezoneOffset should return a new Date instance with timezone offset adjustment for string input without time" name="createDateWithoutTimezoneOffset should return a new Date instance with timezone offset adjustment for string input without time" time="0.001">
+    </testcase>
+    <testcase classname="createDateWithoutTimezoneOffset should return the original Date instance for string input with time" name="createDateWithoutTimezoneOffset should return the original Date instance for string input with time" time="0.001">
     </testcase>
   </testsuite>
 </testsuites>
