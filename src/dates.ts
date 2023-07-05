@@ -174,3 +174,15 @@ export const createDateWithoutTimezoneOffset = (
   return date;
 };
 //#endregion
+
+//#region dateStringHasTimeComponent
+/**
+ * Checks if a given date string contains a time component.
+ *
+ * @param {string} dateString - The date string to be checked.
+ * @returns {boolean} - Returns true if the date string contains a time component, otherwise returns false.
+ */
+export const dateStringHasTimeComponent = (dateString: string) => {
+  return dateString.match(/\d{2}:\d{2}/) != null;
+};
+//#endregion

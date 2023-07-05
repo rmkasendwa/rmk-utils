@@ -1,4 +1,7 @@
-import { createDateWithoutTimezoneOffset } from './dates';
+import {
+  createDateWithoutTimezoneOffset,
+  dateStringHasTimeComponent,
+} from './dates';
 
 describe('createDateWithoutTimezoneOffset', () => {
   it('should return a new Date instance without timezone offset for number input', () => {
@@ -34,5 +37,25 @@ describe('createDateWithoutTimezoneOffset', () => {
     const expected = new Date(input);
 
     expect(result).toEqual(expected);
+  });
+});
+
+describe('dateStringHasTimeComponent', () => {
+  it('should return true for a valid date string with time component', () => {
+    const dateString = '2023-07-05 12:34';
+    const hasTimeComponent = dateStringHasTimeComponent(dateString);
+    expect(hasTimeComponent).toBe(true);
+  });
+
+  it('should return false for a valid date string without time component', () => {
+    const dateString = '2023-07-05';
+    const hasTimeComponent = dateStringHasTimeComponent(dateString);
+    expect(hasTimeComponent).toBe(false);
+  });
+
+  it('should return false for an invalid date string', () => {
+    const dateString = '2023-07-05T12:34:56Z';
+    const hasTimeComponent = dateStringHasTimeComponent(dateString);
+    expect(hasTimeComponent).toBe(true);
   });
 });

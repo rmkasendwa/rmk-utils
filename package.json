@@ -1,6 +1,6 @@
 {
   "name": "@infinite-debugger/rmk-utils",
-  "version": "0.1.0-alpha.22",
+  "version": "0.1.0-alpha.23",
   "description": "RMK Utils is a library of utility functions",
   "keywords": [
     "node",
@@ -31,7 +31,7 @@
     "format": "prettier --write \"./**/*.{js,jsx,ts,tsx,html,htm,json,css,scss,md}\"",
     "postinstall": "npm run prepare",
     "prepare": "husky install",
-    "publish": "npm run build && npm publish ./lib/ --access=public",
+    "publish": "npm test && npm run build && npm publish ./lib/ --access=public",
     "start": "concurrently --names \"Typescript,Assets\" -c \"blue.bold,magenta.bold\" \"tsc -w\" \"copy-and-watch --watch src/**/*.{png,jpg,css,scss,sass,json} lib\"",
     "test": "jest",
     "test:watch": "react-scripts test",

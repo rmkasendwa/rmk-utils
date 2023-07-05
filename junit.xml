@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="15" failures="0" errors="0" time="8.582">
-  <testsuite name="matchPath" errors="0" failures="0" skipped="0" timestamp="2023-06-11T15:59:46" time="6.954" tests="3">
-    <testcase classname="matchPath should return true if the test path matches the template path" name="matchPath should return true if the test path matches the template path" time="0.004">
+<testsuites name="jest tests" tests="18" failures="0" errors="0" time="8.942">
+  <testsuite name="formatBytes" errors="0" failures="0" skipped="0" timestamp="2023-07-04T23:11:57" time="7.459" tests="3">
+    <testcase classname="formatBytes should format bytes correctly" name="formatBytes should format bytes correctly" time="0.005">
+    </testcase>
+    <testcase classname="formatBytes should handle edge case of 0 bytes" name="formatBytes should handle edge case of 0 bytes" time="0">
+    </testcase>
+    <testcase classname="formatBytes should handle negative values" name="formatBytes should handle negative values" time="0.004">
+    </testcase>
+  </testsuite>
+  <testsuite name="matchPath" errors="0" failures="0" skipped="0" timestamp="2023-07-04T23:11:57" time="7.571" tests="3">
+    <testcase classname="matchPath should return true if the test path matches the template path" name="matchPath should return true if the test path matches the template path" time="0.005">
     </testcase>
     <testcase classname="addSearchParams should encode object as stringified url" name="addSearchParams should encode object as stringified url" time="0.002">
     </testcase>
     <testcase classname="addSearchParams should be able to work work with both primitive types and object types in same url" name="addSearchParams should be able to work work with both primitive types and object types in same url" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="formatBytes" errors="0" failures="0" skipped="0" timestamp="2023-06-11T15:59:47" time="7.141" tests="3">
-    <testcase classname="formatBytes should format bytes correctly" name="formatBytes should format bytes correctly" time="0.004">
+  <testsuite name="Cypher" errors="0" failures="0" skipped="0" timestamp="2023-07-04T23:11:57" time="7.755" tests="5">
+    <testcase classname="Cypher decrypt should correctly decrypt a transit message" name="Cypher decrypt should correctly decrypt a transit message" time="0.04">
     </testcase>
-    <testcase classname="formatBytes should handle edge case of 0 bytes" name="formatBytes should handle edge case of 0 bytes" time="0">
+    <testcase classname="Cypher decrypt should return an empty string if decryption fails" name="Cypher decrypt should return an empty string if decryption fails" time="0.035">
     </testcase>
-    <testcase classname="formatBytes should handle negative values" name="formatBytes should handle negative values" time="0">
+    <testcase classname="Cypher encrypt should correctly encrypt a message" name="Cypher encrypt should correctly encrypt a message" time="0.075">
     </testcase>
-  </testsuite>
-  <testsuite name="Cypher" errors="0" failures="0" skipped="0" timestamp="2023-06-11T15:59:46" time="7.663" tests="5">
-    <testcase classname="Cypher decrypt should correctly decrypt a transit message" name="Cypher decrypt should correctly decrypt a transit message" time="0.02">
+    <testcase classname="Cypher encrypt should return a different encrypted message whenever it is called" name="Cypher encrypt should return a different encrypted message whenever it is called" time="0.067">
     </testcase>
-    <testcase classname="Cypher decrypt should return an empty string if decryption fails" name="Cypher decrypt should return an empty string if decryption fails" time="0.025">
-    </testcase>
-    <testcase classname="Cypher encrypt should correctly encrypt a message" name="Cypher encrypt should correctly encrypt a message" time="0.052">
-    </testcase>
-    <testcase classname="Cypher encrypt should return a different encrypted message whenever it is called" name="Cypher encrypt should return a different encrypted message whenever it is called" time="0.047">
-    </testcase>
-    <testcase classname="Cypher encrypt should return the same encrypted message if called with random flag set to false" name="Cypher encrypt should return the same encrypted message if called with random flag set to false" time="0.065">
+    <testcase classname="Cypher encrypt should return the same encrypted message if called with random flag set to false" name="Cypher encrypt should return the same encrypted message if called with random flag set to false" time="0.05">
     </testcase>
   </testsuite>
-  <testsuite name="createDateWithoutTimezoneOffset" errors="0" failures="0" skipped="0" timestamp="2023-06-11T15:59:46" time="7.732" tests="4">
-    <testcase classname="createDateWithoutTimezoneOffset should return a new Date instance without timezone offset for number input" name="createDateWithoutTimezoneOffset should return a new Date instance without timezone offset for number input" time="0.004">
+  <testsuite name="createDateWithoutTimezoneOffset" errors="0" failures="0" skipped="0" timestamp="2023-07-04T23:11:57" time="8.042" tests="7">
+    <testcase classname="createDateWithoutTimezoneOffset should return a new Date instance without timezone offset for number input" name="createDateWithoutTimezoneOffset should return a new Date instance without timezone offset for number input" time="0.003">
     </testcase>
     <testcase classname="createDateWithoutTimezoneOffset should return a new Date instance without timezone offset for Date input" name="createDateWithoutTimezoneOffset should return a new Date instance without timezone offset for Date input" time="0">
     </testcase>
     <testcase classname="createDateWithoutTimezoneOffset should return a new Date instance with timezone offset adjustment for string input without time" name="createDateWithoutTimezoneOffset should return a new Date instance with timezone offset adjustment for string input without time" time="0.001">
     </testcase>
-    <testcase classname="createDateWithoutTimezoneOffset should return the original Date instance for string input with time" name="createDateWithoutTimezoneOffset should return the original Date instance for string input with time" time="0">
+    <testcase classname="createDateWithoutTimezoneOffset should return the original Date instance for string input with time" name="createDateWithoutTimezoneOffset should return the original Date instance for string input with time" time="0.001">
+    </testcase>
+    <testcase classname="checkIfDateStringHasTimeComponent should return true for a valid date string with time component" name="checkIfDateStringHasTimeComponent should return true for a valid date string with time component" time="0">
+    </testcase>
+    <testcase classname="checkIfDateStringHasTimeComponent should return false for a valid date string without time component" name="checkIfDateStringHasTimeComponent should return false for a valid date string without time component" time="0">
+    </testcase>
+    <testcase classname="checkIfDateStringHasTimeComponent should return false for an invalid date string" name="checkIfDateStringHasTimeComponent should return false for an invalid date string" time="0">
     </testcase>
   </testsuite>
 </testsuites>
