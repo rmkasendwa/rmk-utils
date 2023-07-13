@@ -1,3 +1,5 @@
+import { isEmpty } from 'lodash';
+
 export type PathParam = string | number | boolean;
 
 export type QueryParam = PathParam | Record<string, any>;
@@ -148,7 +150,7 @@ export interface AddSearchParamsOptions {
 }
 
 /**
- * Adds search params to a path.
+ * Appends search parameters to a route path or URL.
  *
  * @param routePath The path to which search params will be added.
  * @param searchParams The search params to add to path.
@@ -158,6 +160,23 @@ export interface AddSearchParamsOptions {
  *
  * @example
  * addSearchParams("/users", { userId: 123, status: "ACTIVE" }); -> "/users?userId=123&status=ACTIVE"
+ *
+ * @example
+ * const routePath = '/products';
+ * const searchParams = {
+ *   category: 'electronics',
+ *   price: 100,
+ *   color: ['red', 'blue']
+ * };
+ *
+ * const options = {
+ *   arrayParamStyle: 'comma',
+ *   mode: 'string'
+ * };
+ *
+ * const modifiedURL = addSearchParams(routePath, searchParams, options);
+ * console.log(modifiedURL);
+ * // Output: "/products?category=electronics&price=100&color=red,blue"
  */
 export const addSearchParams = (
   routePath: string,
@@ -165,12 +184,13 @@ export const addSearchParams = (
   { arrayParamStyle = 'comma', mode = 'string' }: AddSearchParamsOptions = {}
 ): string => {
   const keys = Object.keys(searchParams);
+
   if (keys.length === 0) return routePath;
 
   const paramsKeyValuePair = (() => {
     switch (mode) {
       case 'string':
-        return keys.reduce((accumulator, key) => {
+        return keys.reduce<Record<string, string>>((accumulator, key) => {
           switch (arrayParamStyle) {
             case 'append':
               if (
@@ -178,6 +198,13 @@ export const addSearchParams = (
                 String(searchParams[key]).length > 0
               ) {
                 const baseSearchParamValue = searchParams[key]!;
+
+                /**
+                 * Recursively finds the nested value path and appends it to the accumulator.
+                 *
+                 * @param {*} searchParamValue - The current value being processed.
+                 * @param {string[]} searchParamValuePath - The path of keys leading to the current value.
+                 */
                 const findValuePath = (
                   searchParamValue: any,
                   searchParamValuePath: string[] = []
@@ -191,15 +218,16 @@ export const addSearchParams = (
                       ]);
                     });
                   } else {
-                    accumulator.push(
+                    accumulator[
                       `${key}${searchParamValuePath
                         .map((key) => {
                           return `[${key}]`;
                         })
-                        .join('')}=${encodeURIComponent(searchParamValue)}`
-                    );
+                        .join('')}`
+                    ] = encodeURIComponent(searchParamValue);
                   }
                 };
+
                 findValuePath(baseSearchParamValue);
               }
               break;
@@ -222,26 +250,51 @@ export const addSearchParams = (
                   }
                   return String(searchParams[key]);
                 })();
-                accumulator.push(`${key}=${encodeURIComponent(value)}`);
+                accumulator[key] = encodeURIComponent(value);
               }
           }
           return accumulator;
-        }, [] as string[]);
+        }, {});
       case 'json':
-        return keys.reduce((accumulator, key) => {
+        return keys.reduce<Record<string, string>>((accumulator, key) => {
           if (searchParams[key] != null) {
-            accumulator.push(
-              `${key}=${encodeURIComponent(JSON.stringify(searchParams[key]))}`
+            accumulator[key] = encodeURIComponent(
+              JSON.stringify(searchParams[key])
             );
           }
           return accumulator;
-        }, [] as string[]);
+        }, {});
     }
   })();
-  const queryString = paramsKeyValuePair.join('&');
-  if (queryString.length > 0) {
-    return routePath + '?' + queryString;
+
+  if (!isEmpty(paramsKeyValuePair)) {
+    const isValidURL = routePath.includes('://');
+    const url = new URL(
+      routePath,
+      (() => {
+        if (!isValidURL) {
+          return 'http://localhost';
+        }
+      })()
+    );
+
+    /**
+     * Appends key-value pairs to the URL's search parameters.
+     *
+     * @param {string} key - The parameter key.
+     * @param {string} value - The parameter value.
+     */
+    Object.entries(paramsKeyValuePair).forEach(([key, value]) => {
+      url.searchParams.append(key, value);
+    });
+
+    if (!isValidURL) {
+      return url.pathname + url.search;
+    }
+
+    return url.toString();
   }
+
   return routePath;
 };
 
