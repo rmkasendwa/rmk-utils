@@ -288,11 +288,14 @@ export const addSearchParams = (
       url.searchParams.append(key, value);
     });
 
-    if (!isValidURL) {
-      return url.pathname + url.search;
-    }
-
-    return url.toString();
+    return decodeURIComponent(
+      (() => {
+        if (!isValidURL) {
+          return url.pathname + url.search;
+        }
+        return url.toString();
+      })()
+    );
   }
 
   return routePath;

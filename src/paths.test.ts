@@ -30,7 +30,7 @@ describe('addSearchParams', () => {
     };
     const expected = '/products?category=electronics&price=100';
     const modifiedURL = addSearchParams(routePath, searchParams);
-    expect(decodeURIComponent(modifiedURL)).toBe(expected);
+    expect(modifiedURL).toBe(expected);
   });
 
   it('should append search parameters to the route path event when the path has existing search parameters', () => {
@@ -42,7 +42,7 @@ describe('addSearchParams', () => {
     const expected =
       '/products?category=electronics&price=100&availability=true';
     const modifiedURL = addSearchParams(routePath, searchParams);
-    expect(decodeURIComponent(modifiedURL)).toBe(expected);
+    expect(modifiedURL).toBe(expected);
   });
 
   it('should encode object as stringified url', () => {
@@ -60,7 +60,7 @@ describe('addSearchParams', () => {
         arrayParamStyle: 'append',
       }
     );
-    expect(decodeURIComponent(modifiedURL)).toBe(expected);
+    expect(modifiedURL).toBe(expected);
   });
   it('should be able to work work with both primitive types and object types in same url', () => {
     const expected =
@@ -79,6 +79,6 @@ describe('addSearchParams', () => {
         arrayParamStyle: 'append',
       }
     );
-    expect(decodeURIComponent(modifiedURL)).toBe(expected);
+    expect(modifiedURL).toBe(expected);
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "@infinite-debugger/rmk-utils",
-  "version": "0.1.0-alpha.24",
+  "version": "0.1.0-alpha.25",
   "description": "RMK Utils is a library of utility functions",
   "keywords": [
     "node",
