@@ -81,4 +81,27 @@ describe('addSearchParams', () => {
     );
     expect(modifiedURL).toBe(expected);
   });
+
+  it('should replace the existing search param not append if it already exists', () => {
+    {
+      const routePath = '/products?price=150';
+      const searchParams = {
+        category: 'electronics',
+        price: 200,
+      };
+      const expected = '/products?category=electronics&price=200';
+      const modifiedURL = addSearchParams(routePath, searchParams);
+      expect(modifiedURL).toBe(expected);
+    }
+    {
+      const routePath = '/products?price=150&price=250';
+      const searchParams = {
+        category: 'electronics',
+        price: 200,
+      };
+      const expected = '/products?category=electronics&price=200';
+      const modifiedURL = addSearchParams(routePath, searchParams);
+      expect(modifiedURL).toBe(expected);
+    }
+  });
 });

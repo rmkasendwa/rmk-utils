@@ -285,6 +285,7 @@ export const addSearchParams = (
      * @param {string} value - The parameter value.
      */
     Object.entries(paramsKeyValuePair).forEach(([key, value]) => {
+      url.searchParams.delete(key);
       url.searchParams.append(key, value);
     });
 
