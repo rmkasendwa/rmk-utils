@@ -163,7 +163,7 @@ export const createDateWithoutTimezoneOffset = (
   const date = new Date(dateInput);
 
   if (isNaN(date.getTime())) {
-    throw new Error('Invalid date input');
+    return date;
   }
 
   // Check if the date has no time component
