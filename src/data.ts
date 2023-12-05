@@ -1,28 +1,62 @@
-import { isEmpty, omitBy } from 'lodash';
-
 import { formatBytes } from './bytes';
 
-export const diff = (
-  updatedData: any,
-  originalData: any,
-  biDirectional = false
-) => {
-  const dataDiff: any = omitBy(updatedData, (value, key) => {
-    if (typeof originalData?.[key] === 'object') {
-      const similar = isEmpty(diff(updatedData[key], originalData[key]));
-      if (similar) return isEmpty(diff(originalData[key], updatedData[key]));
-      return similar;
-    }
-    return originalData?.[key] === value;
-  });
-  if (biDirectional) {
-    const mirrorDiff = diff(originalData, updatedData);
-    for (const key in mirrorDiff) {
-      if (!dataDiff?.[key] && mirrorDiff?.[key]) {
-        dataDiff[key] = mirrorDiff[key];
+/**
+ * Calculates the difference between two objects, representing changes made in the `updatedData`
+ * compared to the `originalData`. Changes in both directions are included in the output.
+ *
+ * If a key is present in `originalData` but missing in `updatedData`, it will be set to `null` in the output.
+ *
+ * @param updatedData - The updated object containing the modified data.
+ * @param originalData - The original object representing the baseline data.
+ * @returns An object representing the differences between the two input objects.
+ */
+export const diff = (updatedData: any, originalData: any) => {
+  const isEmptyObject = (obj: any) =>
+    obj && Object.keys(obj).length === 0 && obj.constructor === Object;
+
+  const isObject = (value: any) =>
+    value !== null && typeof value === 'object' && !Array.isArray(value);
+
+  const recursiveDiff = (obj1: any, obj2: any) => {
+    const result: any = {};
+
+    for (const key in obj1) {
+      if (isObject(obj1[key]) && isObject(obj2[key])) {
+        const nestedDiff = recursiveDiff(obj1[key], obj2[key]);
+        if (!isEmptyObject(nestedDiff)) {
+          result[key] = nestedDiff;
+        }
+      } else if (obj1[key] !== obj2[key]) {
+        result[key] = obj1[key];
       }
     }
+
+    return result;
+  };
+
+  const dataDiff: any = {};
+
+  // Check for differences and missing keys in updatedData.
+  for (const key in originalData) {
+    if (isObject(originalData?.[key]) && isObject(updatedData?.[key])) {
+      const nestedDiff = recursiveDiff(updatedData[key], originalData[key]);
+      if (!isEmptyObject(nestedDiff)) {
+        dataDiff[key] = nestedDiff;
+      }
+    } else if (!(key in updatedData)) {
+      dataDiff[key] = null;
+    } else if (originalData?.[key] !== updatedData?.[key]) {
+      dataDiff[key] = updatedData?.[key];
+    }
   }
+
+  // Check for keys in updatedData that are not present in originalData.
+  for (const key in updatedData) {
+    if (!(key in originalData)) {
+      dataDiff[key] = updatedData[key];
+    }
+  }
+
   return dataDiff;
 };
 

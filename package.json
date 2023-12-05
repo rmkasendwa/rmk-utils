@@ -24,9 +24,9 @@
   "scripts": {
     "prebuild": "rm -rf lib",
     "build": "npm run build:commonjs && npm run build:esm",
+    "postbuild": "node ./scripts/postbuild",
     "build:commonjs": "tsc && copy-and-watch src/**/*.{png,jpg,css,scss,sass,json} lib",
     "build:esm": "tsc --project tsconfig-esm.compile.json && copy-and-watch src/**/*.{png,jpg,css,scss,sass,json} lib",
-    "postbuild": "node ./scripts/postbuild",
     "eslint": "eslint --fix",
     "format": "prettier --write \"./**/*.{js,jsx,ts,tsx,html,htm,json,css,scss,md}\"",
     "postinstall": "npm run prepare",
@@ -64,6 +64,11 @@
         }
       }
     ]
+  },
+  "dependencies": {
+    "crypto-js": ">=4.1.1",
+    "date-fns": ">=2.29.3",
+    "lodash": ">=4.17.21"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -112,10 +117,5 @@
       "style": "module",
       "parser": "typescript"
     }
-  },
-  "dependencies": {
-    "crypto-js": ">=4.1.1",
-    "date-fns": ">=2.29.3",
-    "lodash": ">=4.17.21"
   }
 }
