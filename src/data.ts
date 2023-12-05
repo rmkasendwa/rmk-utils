@@ -17,17 +17,25 @@ export const diff = (updatedData: any, originalData: any) => {
   const isObject = (value: any) =>
     value !== null && typeof value === 'object' && !Array.isArray(value);
 
-  const recursiveDiff = (obj1: any, obj2: any) => {
+  const recursiveDiff = (nestedUpdatedData: any, nestedOriginalData: any) => {
     const result: any = {};
 
-    for (const key in obj1) {
-      if (isObject(obj1[key]) && isObject(obj2[key])) {
-        const nestedDiff = recursiveDiff(obj1[key], obj2[key]);
+    for (const key in nestedOriginalData) {
+      if (
+        isObject(nestedOriginalData[key]) &&
+        isObject(nestedUpdatedData[key])
+      ) {
+        const nestedDiff = recursiveDiff(
+          nestedUpdatedData[key],
+          nestedOriginalData[key]
+        );
         if (!isEmptyObject(nestedDiff)) {
           result[key] = nestedDiff;
         }
-      } else if (obj1[key] !== obj2[key]) {
-        result[key] = obj1[key];
+      } else if (!(key in nestedUpdatedData)) {
+        result[key] = null;
+      } else if (nestedUpdatedData[key] !== nestedOriginalData[key]) {
+        result[key] = nestedUpdatedData[key];
       }
     }
 
